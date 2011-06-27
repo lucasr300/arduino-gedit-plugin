@@ -92,7 +92,8 @@ class ArduinoPlugin(gedit.Plugin):
 			'')
 			
 			msg = 'Devido a uma limitação do GEdit, o plugin as vezes não salva o arquivo automaticamente. '
-			msg += 'Por favor, clique em salvar antes de compilar e fazer upload do código'
+			msg += 'Por favor, clique em salvar antes de compilar e fazer upload do código.<br> <br>'
+			msg += 'ATENÇÃO: Esta versão só compila código para o AtMega328.'
 			
 			self._st.flash_message(0,'Plugin Arduino carregado.')
 			w.set_markup('<b>Plugin Arduino carregado.</b>\n'+msg)
