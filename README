@@ -1,1 +1,23 @@
-Primeiro Commit
+Arduino GEdit Plugin
+Por: Lucas R. Martins
+
+KNOWN BUGS
+----------------------------------------------------
+
+* Devido a uma limitação do GEdit, o plugin as vezes não salva o arquivo automaticamente.
+
+* Atualmente só compila código para o Arduino com AtMega328. 
+
+
+WARNINGS
+----------------------------------------------------
+
+* Foi testado apenas com meu Arduino. Pode não funcionar com o seu.
+
+
+HOW TO INSTALL
+----------------------------------------------------
+
+* Basta copiar todos os arquivos para o diretório / . Em seguida, é necessário ativar o plugin no menu Editar > Preferências > Plugins do GEdit
+
+

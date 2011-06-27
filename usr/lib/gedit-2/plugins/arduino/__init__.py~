@@ -75,7 +75,32 @@ class ArduinoPlugin(gedit.Plugin):
 		manager.add_ui(self._merge_id, '/MenuBar/ToolsMenu/ToolsOps_4',
 		'arduino-verificar', 'arduino-verificar', gtk.UI_MANAGER_MENUITEM, False)
 		manager.add_ui(self._merge_id, '/MenuBar/ToolsMenu/ToolsOps_4',
-		'arduino-enviar', 'arduino-enviar', gtk.UI_MANAGER_MENUITEM, False)	 
+		'arduino-enviar', 'arduino-enviar', gtk.UI_MANAGER_MENUITEM, False)	
+		
+		#Read the device config
+		
+		try:
+			for line in fileinput.input('/home/'+os.getlogin()+'/.arduino/message'):			
+				pass
+		except:
+			
+			# Display the warning message
+			w = gtk.MessageDialog(None,
+			gtk.DIALOG_DESTROY_WITH_PARENT,
+			gtk.MESSAGE_ERROR,
+			gtk.BUTTONS_OK,
+			'')
+			
+			msg = 'Devido a uma limitação do GEdit, o plugin as vezes não salva o arquivo automaticamente. '
+			msg += 'Por favor, clique em salvar antes de compilar e fazer upload do código'
+			
+			self._st.flash_message(0,'Plugin Arduino carregado.')
+			w.set_markup('<b>Plugin Arduino carregado.</b>\n'+msg)
+			w.run()			
+			w.hide()
+			w = None
+			
+			os.system('touch /home/'+os.getlogin()+'/.arduino/message')
 
 	def compilar(self, window):
 
@@ -149,8 +174,9 @@ class ArduinoPlugin(gedit.Plugin):
 			
 			comando = 'zenity --entry ' + \
 			'--text="Informe a porta serial ou clique em Ok para usar a padrão:" ' + \
-			'--entry-text="/dev/ttyACM0" > ~/.arduino/port'
+			'--entry-text="/dev/ttyACM0" > ~/.arduino/device'
 			
+			os.system('mkdir -p ~/.arduino/')
 			os.system(comando)
 			
 		
@@ -181,29 +207,40 @@ class ArduinoPlugin(gedit.Plugin):
 				
 	def upload(self,window):
 		
-		if self.compilar(window) == True:
+		#Read the device config
 		
-			#w = gtk.MessageDialog(None,
-			#		gtk.DIALOG_DESTROY_WITH_PARENT,
-			#		gtk.MESSAGE_ERROR,
-			#		gtk.BUTTONS_OK,
-			#		'')
-
-			#w.set_markup('Not implemented yet.')
-			#w.run()			
-			#w.hide()
-			#w = None
+		try:
+			for line in fileinput.input('/home/'+os.getlogin()+'/.arduino/device'):			
+				device = line 
+		except:
+			self.create_configure_dialog(window)
+			self.upload(window)
+			return
+			
+		
+		if self.compilar(window) == True:
 			
 			comando = "avrdude.real -p {!part} -P {!device} -U {!filename} -c arduino"
 			comando = comando.replace('{!part}','m328p')
-			comando = comando.replace('{!device}','/dev/ttyACM0')
+			comando = comando.replace('{!device}',porta)
 			comando = comando.replace('{!filename}',self._doc.get_uri_for_display() + '.hex')
 			
 			try:
 				os.system(comando)
 				st.flash_message(0,'Upload concluido')
+				
 			except:
-				st.flash_message(0,'Falha ao fazer upload')
+				
+				w = gtk.MessageDialog(None,
+				gtk.DIALOG_DESTROY_WITH_PARENT,
+				gtk.MESSAGE_ERROR,
+				gtk.BUTTONS_OK,
+				'')
+				
+				w.set_markup('Falha ao fazer upload.')
+				w.run()			
+				w.hide()
+				w = None
 
 	def deactivate(self, window):
 		pass

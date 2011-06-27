@@ -75,7 +75,33 @@ class ArduinoPlugin(gedit.Plugin):
 		manager.add_ui(self._merge_id, '/MenuBar/ToolsMenu/ToolsOps_4',
 		'arduino-verificar', 'arduino-verificar', gtk.UI_MANAGER_MENUITEM, False)
 		manager.add_ui(self._merge_id, '/MenuBar/ToolsMenu/ToolsOps_4',
-		'arduino-enviar', 'arduino-enviar', gtk.UI_MANAGER_MENUITEM, False)	 
+		'arduino-enviar', 'arduino-enviar', gtk.UI_MANAGER_MENUITEM, False)	
+		
+		#Read the device config
+		
+		try:
+			for line in fileinput.input('/home/'+os.getlogin()+'/.arduino/message'):			
+				pass
+		except:
+			
+			# Display the warning message
+			w = gtk.MessageDialog(None,
+			gtk.DIALOG_DESTROY_WITH_PARENT,
+			gtk.MESSAGE_ERROR,
+			gtk.BUTTONS_OK,
+			'')
+			
+			msg = 'Devido a uma limitação do GEdit, o plugin as vezes não salva o arquivo automaticamente. '
+			msg += 'Por favor, clique em salvar antes de compilar e fazer upload do código.<br> <br>'
+			msg += 'ATENÇÃO: Esta versão só compila código para o AtMega328.'
+			
+			self._st.flash_message(0,'Plugin Arduino carregado.')
+			w.set_markup('<b>Plugin Arduino carregado.</b>\n'+msg)
+			w.run()			
+			w.hide()
+			w = None
+			
+			os.system('touch /home/'+os.getlogin()+'/.arduino/message')
 
 	def compilar(self, window):
 
