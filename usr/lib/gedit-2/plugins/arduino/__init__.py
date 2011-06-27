@@ -27,6 +27,8 @@ import gettext
 import os
 import fileinput
 import time
+import serial
+import sys
 
 
 class ArduinoPlugin(gedit.Plugin):
@@ -221,9 +223,19 @@ class ArduinoPlugin(gedit.Plugin):
 		
 		if self.compilar(window) == True:
 			
+			# Reset the board
+			
+			ser = serial.Serial(device)
+			ser.setDTR(1)
+			time.sleep(0.5)
+			ser.setDTR(0)
+			ser.close()
+			
+			
+			# Uploads it.
 			comando = "avrdude.real -p {!part} -P {!device} -U {!filename} -c arduino"
 			comando = comando.replace('{!part}','m328p')
-			comando = comando.replace('{!device}',porta)
+			comando = comando.replace('{!device}',device)
 			comando = comando.replace('{!filename}',self._doc.get_uri_for_display() + '.hex')
 			
 			try:
