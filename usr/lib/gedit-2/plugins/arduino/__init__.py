@@ -1,9 +1,9 @@
 # -*- coding: utf-8 py-indent-offset: 4 -*-
 #
 #	Gedit Arduino Integration plugin
-#	Copyleft (C) 2011 arduinrio.cc
+#	Copyleft (C) 2011 lrmartins.com
 #
-#	Author: Lucas R. Martins <lukasrms@gmail.com>
+#	Author: Lucas R. Martins <lukasrms (at) )gmail.com>
 #
 #	This program is free software; you can redistribute it and/or modify
 #	it under the terms of the GNU General Public License as published by
@@ -108,7 +108,8 @@ class ArduinoPlugin(gedit.Plugin):
 	def compilar(self, window):
 
 		temp_build_dir = '/tmp/arduino-gedit-'+str(time.time()*12121212)
-
+		self.compilado_com_sucesso = False
+		
 		# Updating the current document
 		self._st.flash_message(0,'Compilando. Por favor aguarde...')
 		self._doc = self._window.get_active_document()
@@ -160,7 +161,8 @@ class ArduinoPlugin(gedit.Plugin):
 				w = None
 
 		except:
-			# No errors found			
+			# No errors found
+			self.compilado_com_sucesso = True
 			self._st.flash_message(0,'Compilação concluída')
 			
 			return True
@@ -221,7 +223,9 @@ class ArduinoPlugin(gedit.Plugin):
 			return
 			
 		
-		if self.compilar(window) == True:
+		self.compilar(window)
+			
+		if self.compilado_com_sucesso == True:
 			
 			# Reset the board
 			
