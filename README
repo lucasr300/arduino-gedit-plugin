@@ -1,22 +1,22 @@
-Arduino GEdit Plugin
+=Arduino gEdit Plugin
 Por: Lucas R. Martins
 
-KNOWN BUGS
-----------------------------------------------------
+Um plugin para o gEdit que permite você compilar e fazer upload do seu código direto para o Arduino :-)
 
-* Devido a uma limitação do GEdit, o plugin as vezes não salva o arquivo automaticamente.
+==Known Bugs
+
+* Devido a uma limitação do gEdit, o plugin as vezes não salva o arquivo automaticamente.
 
 * Atualmente só compila código para o Arduino com AtMega328. 
 
 
-WARNINGS
-----------------------------------------------------
+==Warnings
 
 * Foi testado apenas com meu Arduino. Pode não funcionar com o seu.
 
 
-HOW TO INSTALL
-----------------------------------------------------
+==How to install
+
 
 * Basta copiar todos os arquivos para o diretório / . Em seguida, é necessário ativar o plugin no menu Editar > Preferências > Plugins do GEdit
 
